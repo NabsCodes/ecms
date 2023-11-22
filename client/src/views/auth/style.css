@@ -1,0 +1,130 @@
+.lbody {
+    min-height: 100vh;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.lsection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lsection.lside {
+    background-size: 100% 102%;
+}
+
+/* 
+.side img {
+    width: 50%;
+    max-width: 50%;
+} */
+
+.llogin-container {
+    padding: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ltitle {
+    margin-top: -80px;
+    text-transform: uppercase;
+    font-size: 2.5em;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.lseparator {
+    width: 150px;
+    height: 4px;
+    background-color: #25A05C;
+    margin: 24px;
+}
+
+.lwelcome-message {
+    text-align: center;
+    font-size: 1.1em;
+    line-height: 28px;
+    margin-bottom: 30px;
+    color: #696969;
+}
+
+.llogin-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.lform-control {
+    width: 100%;
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.l input,
+.l button {
+    border: none;
+    outline: none;
+    border-radius: 30px;
+    font-size: 1.1em;
+}
+
+.l input {
+    width: 100%;
+    background: #e6e6e6;
+    color: #333;
+    letter-spacing: 0.5px;
+    padding: 14px 64px;
+}
+
+.l input~i {
+    position: absolute;
+    left: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    transition: color 0.4s;
+}
+
+.l input:focus~i {
+    color: #25A05C;
+}
+
+.l button.lsubmit {
+    color: #fff;
+    padding: 14px 64px;
+    margin: 32px auto;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+    background-color: #25A05C;
+    cursor: pointer;
+    transition: opacity 0.4s;
+}
+
+.l button.lsubmit:hover {
+    opacity: 0.9;
+}
+
+/* ----  Responsiveness   ----  */
+@media (max-width: 780px) {
+
+    .lbody {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .lside {
+        display: none;
+    }
+}
+
+.side-image {
+    background-repeat: cover;
+    background-image: url("login.png"), linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+    background-blend-mode: overlay;
+}
