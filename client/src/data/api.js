@@ -1,4 +1,4 @@
-const BackEnd = process.env.REACT_APP_BackEndHostLocal;
+const BackEnd = process.env.REACT_APP_BackEndHost;
 export const caregiver = {
 	//take in a body with data
 	//data :  
