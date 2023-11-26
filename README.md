@@ -8,9 +8,9 @@ The Elderly Care Management System is a web application designed to provide a ce
 
 The Elderly Care Management System is designed to address the following challenges:
 
-* **Difficulty in finding reliable and qualified caregivers for elderly individuals.**
-* **Lack of efficient communication and coordination between elderly individuals, caregivers, and family members.**
-* **Limited access to information and resources for elderly individuals and their caregivers.**
+- **Difficulty in finding reliable and qualified caregivers for elderly individuals.**
+- **Lack of efficient communication and coordination between elderly individuals, caregivers, and family members.**
+- **Limited access to information and resources for elderly individuals and their caregivers.**
 
 ## Objectives
 
@@ -43,7 +43,7 @@ The Elderly Care Management System is built using the following technologies:
 
 ## Deployment
 
-The Elderly Care Management System is designed to be deployed to a cloud-based platform, such as Heroku or AWS, making it accessible from anywhere with an internet connection.
+The Elderly Care Management System is being deployed on Vercel for the frontend and hosted on Render for the backend.
 
 ## Conclusion
 
