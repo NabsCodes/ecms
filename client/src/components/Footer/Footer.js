@@ -10,7 +10,7 @@ function Footer(props) {
         <Row>
           <div className="credits ml-auto">
             <div className="copyright">
-              &copy; {new Date().getYear()}
+              &copy; {new Date().getFullYear()}
             </div>
           </div>
         </Row>
