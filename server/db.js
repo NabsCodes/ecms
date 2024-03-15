@@ -5,8 +5,7 @@ dotenv.config();
 
 let Mongo = "";
 const port = process.env.PORT || process.env.LocalPort;
-{process.env.LocalPort === port ? Mongo = process.env.mongoURL : Mongo = process.env.mongoURLProduction}
-
+{ process.env.LocalPort === port ? Mongo = process.env.mongoURL : Mongo = process.env.mongoURLProduction; }
 
 //creating an instance of the mongodb connection
 mongoose.connect(Mongo, {

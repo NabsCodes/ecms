@@ -12,7 +12,7 @@ const { auth } = require('../../middleware/auth');
 
 let FrontEnd = "";
 const port = process.env.PORT || process.env.LocalPort;
-{ process.env.LocalPort === port ? FrontEnd = process.env.FrontEndHost : FrontEnd = process.env.FrontEndHostProduction }
+{ process.env.LocalPort === port ? FrontEnd = process.env.FrontEndHost : FrontEnd = process.env.FrontEndHostProduction; }
 
 //@routes POST api/auth
 //@desc Authenticate user
@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
         bcrypt.compare(password, user.password) //comparing passwords
             .then(isMatch => {
                 if (!isMatch) {
-                    return res.status(401).send({ msg: 'Invalid Credentails', auth: false })
+                    return res.status(401).send({ msg: 'Invalid Credentails', auth: false });
                 };
                 //isMatch is true 
                 jwt.sign(
@@ -54,11 +54,11 @@ router.post('/', async (req, res) => {
                         // });
                         res.status(200).send({ 'auth': true, token });
                     }
-                )
-            })
+                );
+            });
 
     } catch (err) {
-        res.status(500).json({ msg: err, auth: false })
+        res.status(500).json({ msg: err, auth: false });
     }
 });
 
@@ -69,7 +69,7 @@ router.post('/', async (req, res) => {
 router.get('/user', auth, (req, res) => {
     User.findById(req.user.id)
         .select('-password')
-        .then(user => res.json(user))
+        .then(user => res.json(user));
 });
 
 

@@ -36,6 +36,21 @@ Content-Type: application/json
 
 }
 
+POST http://localhost:5001/api/user/add_user
+Content-Type: application/json
+
+{
+  "email":"admin@gmail.com",  
+  "first_name":"Abdulhamid",
+  "last_name":"Tukur",
+  "dob":"1999/10/03",
+  "role":"admin",
+  "phone":  "09094252810",
+  "status":"active",
+  "password":"admin",
+  "address":"No 98 Ahamdu Zubairu Way."
+}
+
 
 
 

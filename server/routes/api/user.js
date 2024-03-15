@@ -11,7 +11,7 @@ const Invoice = require('../../models/Invoice');
 
 
 const port = process.env.PORT || process.env.LocalPort;
-{ process.env.LocalPort === port ? FrontEnd = process.env.FrontEndHost : FrontEnd = process.env.FrontEndHostProduction }
+{ process.env.LocalPort === port ? FrontEnd = process.env.FrontEndHost : FrontEnd = process.env.FrontEndHostProduction; }
 
 
 //@routes PUT api/user/editProfile
@@ -28,8 +28,8 @@ router.patch('/update_user/:id', auth, async (req, res) => {
 		}
 
 		const user = await Users.findByIdAndUpdate(id, req.body);
-		console.log(user)
-		if (!user) { res.status(400).send({ status: false, error: 'Problem with the update query' }) };
+		console.log(user);
+		if (!user) { res.status(400).send({ status: false, error: 'Problem with the update query' }); };
 
 		//add change to system
 		res.status(200).send({ status: true, message: "Profile Updated" });
@@ -45,13 +45,13 @@ router.patch('/update_user/:id', auth, async (req, res) => {
 router.post('/add_user', async (req, res) => {
 	const { first_name, email, last_name, dob, role, address, phone, password } = req.body;
 	if (email == undefined || first_name == undefined || last_name == undefined || dob == undefined || role == undefined || address == undefined || phone == undefined || password == undefined) {
-		return res.status(400).send({ msg: 'Some fields are empty!' })
+		return res.status(400).send({ msg: 'Some fields are empty!' });
 	}
 	try {
 		user = await Users.findOne({ email: email });
 
 		//if user already exist
-		if (user) { return res.status(400).send({ msg: 'User Already Exist' }) };
+		if (user) { return res.status(400).send({ msg: 'User Already Exist' }); };
 
 		//creating new user
 		const newUser = new Users(req.body);
@@ -85,12 +85,12 @@ router.get('/show_users/:role', auth, async (req, res) => {
 		let skip = 0;
 		let take = 100; //in the case current page is not specified
 		if (current) {
-			skip = (current - 1) * 10
+			skip = (current - 1) * 10;
 			take = 10;
 		}
 		// let caregiver = await CareGiver.find({ $or: [{ email: search }, { first_name: search }, { last_name: search }] }).skip(skip).limit(take);
 		let users = await Users.find({ role }).select('-password').skip(skip).limit(take);
-		if (!users) { res.status(400).send({ status: false, error: 'Problem with the query or user not found' }) };
+		if (!users) { res.status(400).send({ status: false, error: 'Problem with the query or user not found' }); };
 		res.status(200).send({ status: true, data: users, count: users.length || 0 });
 
 	} catch (err) {
@@ -104,12 +104,12 @@ router.get('/show_all_users', auth, async (req, res) => {
 		let skip = 0;
 		let take = 100; //in the case current page is not specified
 		if (current) {
-			skip = (current - 1) * 10
+			skip = (current - 1) * 10;
 			take = 10;
 		}
 		// let caregiver = await CareGiver.find({ $or: [{ email: search }, { first_name: search }, { last_name: search }] }).skip(skip).limit(take);
 		let users = await Users.find().select('-password').skip(skip).limit(take);
-		if (!users) { res.status(400).send({ status: false, error: 'Problem with the query or user not found' }) };
+		if (!users) { res.status(400).send({ status: false, error: 'Problem with the query or user not found' }); };
 		res.status(200).send({ status: true, data: users, count: users.length || 0 });
 
 	} catch (err) {
@@ -118,52 +118,52 @@ router.get('/show_all_users', auth, async (req, res) => {
 });
 
 function checkDates(start1, end1) {
-    if (!start1 || !end1) {
-      return false;
-    }
-    const date = new Date();
+	if (!start1 || !end1) {
+		return false;
+	}
+	const date = new Date();
 
-    const start = new Date(start1);
-    const end = new Date(end1);
-    let result = null;
+	const start = new Date(start1);
+	const end = new Date(end1);
+	let result = null;
 
-    if (date > start && date < end) {
-      result = true;
-    } else {
-      result = false;
-    }
-    return result;
-  }
+	if (date > start && date < end) {
+		result = true;
+	} else {
+		result = false;
+	}
+	return result;
+}
 
 
 router.get('/show_all_contracts', auth, async (req, res) => {
 	const { current, search } = req.query;
 	try {
-		let noContracts=[];
-		let valid=[];
-		let expired=[];
+		let noContracts = [];
+		let valid = [];
+		let expired = [];
 
 		let skip = 0;
 		let take = 100; //in the case current page is not specified
 		if (current) {
-			skip = (current - 1) * 10
+			skip = (current - 1) * 10;
 			take = 10;
 		}
 		// let caregiver = await CareGiver.find({ $or: [{ email: search }, { first_name: search }, { last_name: search }] }).skip(skip).limit(take);
 		let users = await Users.find().select('-password');
 
-		users.map((user)=>{
-			if(user.Contracts.length>0){
-				checkDates(user.Contracts[0].start_date, user.Contracts[0].end_date)?valid=[...valid,user]:expired=[...expired,user];
-			}else{
+		users.map((user) => {
+			if (user.Contracts.length > 0) {
+				checkDates(user.Contracts[0].start_date, user.Contracts[0].end_date) ? valid = [...valid, user] : expired = [...expired, user];
+			} else {
 				noContracts = [...noContracts, user];
 			}
-			user.Contracts.map((c)=>{
+			user.Contracts.map((c) => {
 
-			})
-		})
-		if (!users) { res.status(400).send({ status: false, error: 'Problem with the query or user not found' }) };
-		res.status(200).send({ status: true, data: users, count: users.length || 0 , noContracts, valid, expired});
+			});
+		});
+		if (!users) { res.status(400).send({ status: false, error: 'Problem with the query or user not found' }); };
+		res.status(200).send({ status: true, data: users, count: users.length || 0, noContracts, valid, expired });
 
 	} catch (err) {
 		res.status(400).json({ msg: err });
@@ -178,7 +178,7 @@ router.get('/show_user_by_email/:email', auth, async (req, res) => {
 	try {
 		// let caregiver = await CareGiver.find({ $or: [{ email: search }, { first_name: search }, { last_name: search }] }).skip(skip).limit(take);
 		let users = await Users.findOne({ email }).select('-password');
-		if (!users) { return res.status(400).send({ status: false, msg: 'User not found' }) };
+		if (!users) { return res.status(400).send({ status: false, msg: 'User not found' }); };
 		return res.status(200).send({ status: true, data: users });
 
 	} catch (err) {
@@ -193,7 +193,7 @@ router.get('/get_counts', auth, async (req, res) => {
 		let users = await Users.find();
 		let clients = await Users.countDocuments({ role: "client" });
 		let contracts = 0;
-		if (!users) { return res.status(400).send({ status: false, msg: 'User not found' }) };
+		if (!users) { return res.status(400).send({ status: false, msg: 'User not found' }); };
 		users.map((u) => {
 			contracts += u.Contracts.length || 0;
 		});
@@ -215,7 +215,7 @@ router.get('/get_counts/:email', auth, async (req, res) => {
 		return res.status(200).send({ status: true, data: { invoices, contracts } });
 
 	} catch (err) {
-		conso
+		conso;
 		return res.status(400).json({ msg: err });
 	}
 });
@@ -232,8 +232,8 @@ router.get('/loggedIn', async (req, res) => {
 		} else {
 			jwt.verify(token, process.env.jwtSecret, function (err) {
 				if (err) { res.status(200).send({ status: false }); }
-				else { res.status(200).send(true) };
-			})
+				else { res.status(200).send(true); };
+			});
 
 		}
 		//verify token

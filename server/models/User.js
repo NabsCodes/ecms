@@ -92,7 +92,7 @@ const UserSchema = new Schema({
     },
     status: { type: String, default: "active" },
     staff_type: { type: String, default: "Permanent" },
-    Medical:{},
+    Medical: {},
     password: {
         type: String,
         required: [true, 'Password!']
