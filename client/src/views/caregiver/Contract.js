@@ -17,8 +17,8 @@ import {
 function Contracts() {
   const [mode, setMode] = useState('view');
   const [current, setCurrent] = useState({ email: "" });
-  const [search, setSearch] = useState('');
-  const [notificationStatus, setNotificationStatus] = useState(false)
+  const [search] = useState('');
+  const [notificationStatus, setNotificationStatus] = useState(false);
   const [notificationDetails, setNotificationDetails] = useState({ msg: "", type: "" });
   const { userDetail } = useAuth();
 
@@ -34,7 +34,7 @@ function Contracts() {
             setNotificationDetails({ msg: "Error Loading Contracts, Please Referesh The Page", type: "danger" });
             setNotificationStatus(true);
           }
-        })
+        });
       }
       fetchContracts();
     },
@@ -116,7 +116,7 @@ function Contracts() {
                               </td>
 
                             </tr>
-                          )
+                          );
                         })}
                       </tbody>
                     </Table>

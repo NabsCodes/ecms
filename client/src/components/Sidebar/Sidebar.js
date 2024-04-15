@@ -4,8 +4,6 @@ import { Nav } from "reactstrap";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
 
-import logo from "../../assets/img/logo.png";
-
 var ps;
 
 function Sidebar(props) {
@@ -42,12 +40,12 @@ function Sidebar(props) {
             <img src={logo} alt="react-logo" />
           </div>
         </a> */}
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a
-          href="#"
+          href="/"
           className="simple-text logo-normal"
         >
           CMS Elderly Home
-
         </a>
       </div>
       <div className="sidebar-wrapper" ref={sidebar}>

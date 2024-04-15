@@ -124,14 +124,13 @@ function Header({ props, routes }) {
           </div>
 
           <div className="logo">
-            <a
-              href="#"
+            <button
               className="simple-text logo-mini"
             >
               <div className="logo-img">
                 <img src={logo} style={{ width: "40px", marginRight: "10px" }} alt="react-logo" />
               </div>
-            </a>
+            </button>
 
           </div>
         </div>

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "contexts/AuthContext";
 import Notifications from "components/Notification/Notification";
-import { user } from '../../data/api';
-import axios from 'axios';
 import { FaUserCircle } from "react-icons/fa";
 // reactstrap components
 import {
@@ -17,24 +15,11 @@ import {
 } from "reactstrap";
 
 function User() {
-  const { userDetail, setUserDetail } = useAuth();
-  const [profile, setProfile] = useState(userDetail);
-  const [notificationStatus, setNotificationStatus] = useState(false)
-  const [notificationDetails, setNotificationDetails] = useState({ msg: "", type: "" });
+  const { userDetail } = useAuth();
+  const [profile] = useState(userDetail);
+  const [notificationStatus] = useState(false);
+  const [notificationDetails] = useState({ msg: "", type: "" });
 
-  async function editProfile(e) {
-    e.preventDefault();
-    await axios.patch(user.updateUser + "/" + profile._id, profile).then((res) => {
-      if (res.data.status) {
-        setNotificationDetails({ msg: "Profile Updated Successfully", type: "success", change: res.data.change });
-        setUserDetail(profile);
-      }
-      else {
-        setNotificationDetails({ msg: "Error Updating Profile", type: "Danger" });
-      }
-      setNotificationStatus(true);
-    });
-  }
   return (
     <>
       {notificationStatus ? <Notifications details={notificationDetails} /> : null}

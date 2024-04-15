@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 
 function Schedules() {
-  const [notificationStatus, setNotificationStatus] = useState(false)
+  const [notificationStatus, setNotificationStatus] = useState(false);
   const [notificationDetails, setNotificationDetails] = useState({ msg: "", type: "" });
   const [current, setCurrent] = useState({});
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -24,11 +24,12 @@ function Schedules() {
         await axios.get(schedule.showAllSchedules).then((response) => {
           if (response.data.status === true) {
             if ((response.data.data)) {
+              // eslint-disable-next-line array-callback-return
               (response.data.data).map((x) => {
                 if (checkDates(x.start_date, x.end_date)) {
                   setCurrent(x);
                 }
-              })
+              });
 
             }
           }
@@ -36,7 +37,7 @@ function Schedules() {
             setNotificationDetails({ msg: "Error Loading Schedules, Please Referesh The Page", type: "danger" });
             setNotificationStatus(true);
           }
-        })
+        });
       }
       fetchSchedules();
 
@@ -94,12 +95,12 @@ function Schedules() {
                                       {stf.name},
                                     </span>
 
-                                  )
+                                  );
                                 })}
                               </>
                             </td >
                           </tr>
-                        )
+                        );
                       })}
                     </tbody>
                   </Table>
