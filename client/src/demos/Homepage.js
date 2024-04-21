@@ -2,8 +2,8 @@ import React from "react";
 import AnimationRevealPage from "helpers/AnimationRevealPage.js";
 import Preview from "demos/Previews.js";
 import Footer from "demos/Footer.js";
-import Hero1 from "demos/BackgroundAsImage"
-import Features from "demos/Features"
+import Hero1 from "demos/BackgroundAsImage";
+import Features from "demos/Features";
 // import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import tw from "twin.macro";
 
@@ -35,5 +35,5 @@ export default () => {
       />
       <Footer />
     </AnimationRevealPage>
-  )
+  );
 };

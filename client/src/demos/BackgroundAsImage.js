@@ -17,7 +17,7 @@ const StyledHeader = styled(Header)`
 `;
 const Container = styled.div`
   ${tw`relative -mx-8 -mt-8 bg-center bg-cover`}
-  background-image: url("https://lirp.cdn-website.com/b29d6873/dms3rep/multi/opt/eldercare-homecare-scarsdale-new-york-city-smile-man-v9-flipped-cropped-1920w.jpg");
+  background-image: url("https://thumbor.forbes.com/thumbor/fit-in/900x510/https://www.forbes.com/advisor/wp-content/uploads/2023/07/nurse-helping-patient.jpeg");
 `;
 
 const OpacityOverlay = tw.div`z-10 absolute inset-0`;
