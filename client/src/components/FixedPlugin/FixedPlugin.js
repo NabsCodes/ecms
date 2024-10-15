@@ -104,7 +104,6 @@ function FixedPlugin(props) {
               />
             </div>
           </li>
-
         </ul>
       </div>
     </div>

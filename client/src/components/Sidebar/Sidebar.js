@@ -41,10 +41,7 @@ function Sidebar(props) {
           </div>
         </a> */}
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a
-          href="/"
-          className="simple-text logo-normal"
-        >
+        <a href="/" className="simple-text logo-normal">
           CMS Elderly Home
         </a>
       </div>
@@ -63,8 +60,16 @@ function Sidebar(props) {
                   className="nav-link"
                   activeClassName="active"
                 >
-                  {prop.icon_comp ? <>{prop.icon_comp} <span style={{ paddingLeft: '15px' }}> {prop.name}</span></> : <><i className={prop.icon} /> <p>{prop.name}</p></>}
-
+                  {prop.icon_comp ? (
+                    <>
+                      {prop.icon_comp}{" "}
+                      <span style={{ paddingLeft: "15px" }}> {prop.name}</span>
+                    </>
+                  ) : (
+                    <>
+                      <i className={prop.icon} /> <p>{prop.name}</p>
+                    </>
+                  )}
                 </NavLink>
               </li>
             );

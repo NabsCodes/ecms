@@ -1,4 +1,3 @@
-
 // */
 // const dashboard24HoursPerformanceChart = {
 //   data: (canvas) => {

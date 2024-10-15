@@ -7,7 +7,6 @@ import Features from "demos/Features";
 // import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import tw from "twin.macro";
 
-
 export default () => {
   const Subheading = tw.span`tracking-wider text-sm font-medium`;
   const HighlightedText = tw.span`bg-green-500 text-gray-100 px-4 transform -skew-x-12 inline-block`;
@@ -19,14 +18,17 @@ export default () => {
       <Features />
       <Preview
         subheading={<Subheading>A Reputed Brand</Subheading>}
-        heading={<>Meet The <HighlightedText>Director</HighlightedText></>}
+        heading={
+          <>
+            Meet The <HighlightedText>Director</HighlightedText>
+          </>
+        }
         statistics={[
           {
             key: "Date : Time",
             value: "Thurdays: 10AM",
-          }
+          },
         ]}
-
         imageCss={Object.assign(tw`bg-cover`, imageCss)}
         imageContainerCss={tw`md:w-1/3 h-auto`}
         imageDecoratorBlob={true}

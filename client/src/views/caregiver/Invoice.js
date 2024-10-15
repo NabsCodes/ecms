@@ -15,51 +15,73 @@ import {
   Table,
   Row,
   Col,
-  InputGroup, InputGroupAddon, InputGroupText, Input
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  Input,
 } from "reactstrap";
 
 function Invoices() {
   const [invoices, setInvoices] = useState([]);
   const [notificationStatus, setNotificationStatus] = useState(false);
-  const [notificationDetails, setNotificationDetails] = useState({ msg: "", type: "" });
-  const [mode, setMode] = useState('all');
+  const [notificationDetails, setNotificationDetails] = useState({
+    msg: "",
+    type: "",
+  });
+  const [mode, setMode] = useState("all");
   const [current, setCurrent] = useState({ email: "" });
   const [pagination, setPagination] = useState({ current: 1 });
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const { userDetail } = useAuth();
 
   useEffect(
     () => {
       async function fetchInvoices() {
-        await axios.get(invoice_api.showInvoice + "/" + userDetail.email, { params: { ...pagination, search } }).then((response) => {
-          if (response.data.status === true) {
-            setInvoices(response.data.data);
-            if (pagination.current === 1) setPagination({ ...pagination, count: response.data.count });
-          }
-          else {
-            setNotificationDetails({ msg: "Error Loading Invoices, Please Referesh The Page", type: "danger" });
-            setNotificationStatus(true);
-          }
-        })
+        await axios
+          .get(invoice_api.showInvoice + "/" + userDetail.email, {
+            params: { ...pagination, search },
+          })
+          .then((response) => {
+            if (response.data.status === true) {
+              setInvoices(response.data.data);
+              if (pagination.current === 1)
+                setPagination({ ...pagination, count: response.data.count });
+            } else {
+              setNotificationDetails({
+                msg: "Error Loading Invoices, Please Referesh The Page",
+                type: "danger",
+              });
+              setNotificationStatus(true);
+            }
+          });
       }
       fetchInvoices();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]);
+    [search],
+  );
   // eslint-disable-next-line react-hooks/exhaustive-deps
-
 
   return (
     <>
-      {notificationStatus === true ? <Notifications details={notificationDetails} /> : null}
+      {notificationStatus === true ? (
+        <Notifications details={notificationDetails} />
+      ) : null}
       <div className="content">
-        {mode === "all" ?
+        {mode === "all" ? (
           <>
             <Row style={{ marginTop: "-30px" }}>
-              <Col style={{ padding: "20px" }}><h5>Total: {pagination.count || 0}</h5></Col>
+              <Col style={{ padding: "20px" }}>
+                <h5>Total: {pagination.count || 0}</h5>
+              </Col>
               <Col style={{ paddingTop: "22px" }}>
                 <InputGroup style={{ borderColor: "#ccc" }}>
-                  <Input placeholder="Search..." onChange={(e) => { setSearch(e.target.value) }} />
+                  <Input
+                    placeholder="Search..."
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                    }}
+                  />
                   <InputGroupAddon addonType="append">
                     <InputGroupText>
                       <i className="nc-icon nc-zoom-split" />
@@ -67,11 +89,9 @@ function Invoices() {
                   </InputGroupAddon>
                 </InputGroup>
               </Col>
-
             </Row>
             <Card>
               <CardBody>
-
                 <Table>
                   <thead>
                     <tr>
@@ -86,30 +106,48 @@ function Invoices() {
                       return (
                         <tr key={key}>
                           <td>{items.email}</td>
-                          <td>{new Date(items.date_created).toLocaleDateString() + " " + new Date(items.date_created).toLocaleTimeString()}</td>
+                          <td>
+                            {new Date(items.date_created).toLocaleDateString() +
+                              " " +
+                              new Date(items.date_created).toLocaleTimeString()}
+                          </td>
                           <td>{items.amount}</td>
                           <td>
-                            <button onClick={() => { setMode("view"); setCurrent(items) }} className="btn" style={{ margin: "0px", padding: "5px" }}>
+                            <button
+                              onClick={() => {
+                                setMode("view");
+                                setCurrent(items);
+                              }}
+                              className="btn"
+                              style={{ margin: "0px", padding: "5px" }}
+                            >
                               <BsEye size={20} /> View
                             </button>
                           </td>
                         </tr>
-                      )
+                      );
                     })}
                   </tbody>
                 </Table>
               </CardBody>
             </Card>
-            <RPagination pagination={pagination} setPagination={setPagination} />
+            <RPagination
+              pagination={pagination}
+              setPagination={setPagination}
+            />
           </>
-          : null
-        }
+        ) : null}
 
-
-
-        {mode === "view" ?
+        {mode === "view" ? (
           <>
-            <button onClick={() => { setMode("all"); setCurrent({}) }} className="btn" style={{ margin: "0px", padding: "10px", marginBottom: "15px" }}>
+            <button
+              onClick={() => {
+                setMode("all");
+                setCurrent({});
+              }}
+              className="btn"
+              style={{ margin: "0px", padding: "10px", marginBottom: "15px" }}
+            >
               <BsArrowBarLeft size={20} /> Back to Invoices
             </button>
 
@@ -119,12 +157,16 @@ function Invoices() {
                   <Row>
                     <Col md={9} style={{ padding: "20px" }}>
                       <img src={logo} alt="cms logo" />
-                      <h3 style={{ paddingLeft: "10px" }}> <FaFileInvoice size={30} /> INVOICE</h3>
+                      <h3 style={{ paddingLeft: "10px" }}>
+                        {" "}
+                        <FaFileInvoice size={30} /> INVOICE
+                      </h3>
                     </Col>
                     <Col style={{ padding: "10px" }}>
-                      <h4 style={{ marginTop: "10px", marginRight: "10px" }}>Elderly Care Management System</h4>
+                      <h4 style={{ marginTop: "10px", marginRight: "10px" }}>
+                        Elderly Care Management System
+                      </h4>
                     </Col>
-
                   </Row>
 
                   <CardBody>
@@ -140,7 +182,11 @@ function Invoices() {
                       <tbody>
                         <tr>
                           <td>{current.email}</td>
-                          <td>{new Date(current.date_created).toLocaleDateString()}</td>
+                          <td>
+                            {new Date(
+                              current.date_created,
+                            ).toLocaleDateString()}
+                          </td>
                           <td>{current.amount}</td>
                           <td>{current.description}</td>
                         </tr>
@@ -149,12 +195,9 @@ function Invoices() {
                   </CardBody>
                 </Card>
               </Col>
-
             </Row>
           </>
-          : null
-        }
-
+        ) : null}
       </div>
     </>
   );

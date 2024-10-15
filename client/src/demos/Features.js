@@ -10,7 +10,6 @@ import { GrSchedulePlay, GrCertificate } from "react-icons/gr";
 import { GiHealthDecrease } from "react-icons/gi";
 import { BiPhoneCall } from "react-icons/bi";
 
-
 const Container = tw.div`relative`;
 
 const ThreeColumnContainer = styled.div`
@@ -65,18 +64,17 @@ export default () => {
   ];
 
   return (
-    <Container id="services" >
+    <Container id="services">
       <ThreeColumnContainer>
-        <Heading>Our Care <span tw="text-green-500">Services</span></Heading>
+        <Heading>
+          Our Care <span tw="text-green-500">Services</span>
+        </Heading>
         {cards.map((card, i) => (
           <Column key={i}>
             <Card>
-              <span className="imageContainer">
-                {card.imageSrc}
-              </span>
+              <span className="imageContainer">{card.imageSrc}</span>
               <span className="textContainer">
                 <span className="title">{card.title || "Fully Secure"}</span>
-
               </span>
             </Card>
           </Column>

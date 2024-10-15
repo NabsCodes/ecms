@@ -1,5 +1,5 @@
 .form-check {
-  .form-check-sign{
+  .form-check-sign {
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     -webkit-font-smoothing: antialiased;
@@ -11,7 +11,7 @@
   }
 }
 
-.form-check-radio .form-check-sign{
+.form-check-radio .form-check-sign {
   // font-family: 'FontAwesome';
   font-family: "Font Awesome 5 Free";
   font-weight: 400;
@@ -21,27 +21,29 @@
   font-variant: normal;
   text-rendering: auto;
   line-height: 1;
-  &::before{
+  &::before {
     font-size: 22px;
     content: "\f111";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     display: inline-block;
     position: absolute;
-    opacity: .50;
+    opacity: 0.5;
     left: 5px;
     top: -5px;
   }
 }
-.form-check .form-check-sign:after{
+.form-check .form-check-sign:after {
   font-family: "Font Awesome 5 Free";
   top: 4px;
 }
-.form-check-radio .form-check-sign::after,.form-check-radio input[type="radio"]:checked + .form-check-sign::after {
+.form-check-radio .form-check-sign::after,
+.form-check-radio input[type="radio"]:checked + .form-check-sign::after {
   font-family: "Font Awesome 5 Free";
   top: -1px;
 }
-.form-check-radio .form-check-sign::before, .form-check-radio input[type="radio"]:checked + .form-check-sign::before {
+.form-check-radio .form-check-sign::before,
+.form-check-radio input[type="radio"]:checked + .form-check-sign::before {
   font-family: "Font Awesome 5 Free";
   top: -1px;
 }

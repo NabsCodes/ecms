@@ -14,49 +14,70 @@ import {
   Table,
   Row,
   Col,
-  InputGroup, InputGroupAddon, InputGroupText, Input, Form, FormGroup, Button
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  Input,
+  Form,
+  FormGroup,
+  Button,
 } from "reactstrap";
 
 function Schedules() {
   const [schedules, setSchedules] = useState([]);
-  const [notificationStatus, setNotificationStatus] = useState(false)
-  const [notificationDetails, setNotificationDetails] = useState({ msg: "", type: "" });
-  const [mode, setMode] = useState('all');
+  const [notificationStatus, setNotificationStatus] = useState(false);
+  const [notificationDetails, setNotificationDetails] = useState({
+    msg: "",
+    type: "",
+  });
+  const [mode, setMode] = useState("all");
   const [current, setCurrent] = useState({});
   const [pagination, setPagination] = useState({ current: 1 });
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [date, setDate] = useState({});
-  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
 
   useEffect(
     () => {
       async function fetchSchedules() {
-        await axios.get(schedule.showAllSchedules, { params: { ...pagination, search } }).then((response) => {
-          if (response.data.status === true) {
-            setSchedules(response.data.data);
-            if ((response.data.data).length > 0) {
-              let temp = new Date(response.data.data[0].end_date);
-              temp = temp.setDate(temp.getDate() + 1);
-              getFirstAndLast(temp);
-            }
+        await axios
+          .get(schedule.showAllSchedules, { params: { ...pagination, search } })
+          .then((response) => {
+            if (response.data.status === true) {
+              setSchedules(response.data.data);
+              if (response.data.data.length > 0) {
+                let temp = new Date(response.data.data[0].end_date);
+                temp = temp.setDate(temp.getDate() + 1);
+                getFirstAndLast(temp);
+              }
 
-            if (pagination.current === 1) setPagination({ ...pagination, count: response.data.count });
-          }
-          else {
-            setNotificationDetails({ msg: "Error Loading Schedules, Please Referesh The Page", type: "danger" });
-            setNotificationStatus(true);
-          }
-        })
+              if (pagination.current === 1)
+                setPagination({ ...pagination, count: response.data.count });
+            } else {
+              setNotificationDetails({
+                msg: "Error Loading Schedules, Please Referesh The Page",
+                type: "danger",
+              });
+              setNotificationStatus(true);
+            }
+          });
       }
       fetchSchedules();
-
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]);
+    [search],
+  );
   // eslint-disable-next-line react-hooks/exhaustive-deps
 
   function getFirstAndLast(f) {
-
     let wDate = new Date();
 
     if (f) {
@@ -71,50 +92,69 @@ function Schedules() {
     var dayNr = Math.ceil((wDate - firstJanuary) / (24 * 60 * 60 * 1000));
     var week = Math.ceil((dayNr + firstJanuary.getDay()) / 7);
 
-    setDate({ first: firstDayWeek.toISOString().split('T')[0], last: lastDayWeek.toISOString().split('T')[0], week });
-  };
-
-
-
-  async function addSchedule(e) {
-    e.preventDefault();
-    await axios.post(schedule.addSchedule, date).then((res) => {
-      if (res.data.status) {
-        setNotificationDetails({ msg: "Schedule Generated Successfully.", type: "success" });
-        if (Object.keys(res.data.data).length) {
-          setSchedules([res.data.data, ...schedules]);
-          setPagination({ ...pagination, count: pagination.count + 1 });
-        }
-
-      }
-      else {
-        setNotificationDetails({ msg: "Error Adding Schedule.", type: "danger" });
-      }
-      setNotificationStatus(true);
-    }).catch((error) => {
-      if (error.response) {
-        setNotificationDetails({ msg: error.response.data.msg, type: "danger" });
-        setNotificationStatus(true);
-      } else {
-        setNotificationDetails({ msg: "Network Error!", type: "danger" });
-        setNotificationStatus(true);
-      }
-
+    setDate({
+      first: firstDayWeek.toISOString().split("T")[0],
+      last: lastDayWeek.toISOString().split("T")[0],
+      week,
     });
   }
 
+  async function addSchedule(e) {
+    e.preventDefault();
+    await axios
+      .post(schedule.addSchedule, date)
+      .then((res) => {
+        if (res.data.status) {
+          setNotificationDetails({
+            msg: "Schedule Generated Successfully.",
+            type: "success",
+          });
+          if (Object.keys(res.data.data).length) {
+            setSchedules([res.data.data, ...schedules]);
+            setPagination({ ...pagination, count: pagination.count + 1 });
+          }
+        } else {
+          setNotificationDetails({
+            msg: "Error Adding Schedule.",
+            type: "danger",
+          });
+        }
+        setNotificationStatus(true);
+      })
+      .catch((error) => {
+        if (error.response) {
+          setNotificationDetails({
+            msg: error.response.data.msg,
+            type: "danger",
+          });
+          setNotificationStatus(true);
+        } else {
+          setNotificationDetails({ msg: "Network Error!", type: "danger" });
+          setNotificationStatus(true);
+        }
+      });
+  }
 
   return (
     <>
-      {notificationStatus === true ? <Notifications details={notificationDetails} /> : null}
+      {notificationStatus === true ? (
+        <Notifications details={notificationDetails} />
+      ) : null}
       <div className="content">
-        {mode === "all" ?
+        {mode === "all" ? (
           <>
             <Row style={{ marginTop: "-30px" }}>
-              <Col style={{ padding: "20px" }}><h5>Total: {pagination.count || 0}</h5></Col>
+              <Col style={{ padding: "20px" }}>
+                <h5>Total: {pagination.count || 0}</h5>
+              </Col>
               <Col style={{ paddingTop: "22px" }}>
                 <InputGroup style={{ borderColor: "#ccc" }}>
-                  <Input placeholder="Search..." onChange={(e) => { setSearch(e.target.value) }} />
+                  <Input
+                    placeholder="Search..."
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                    }}
+                  />
                   <InputGroupAddon addonType="append">
                     <InputGroupText>
                       <i className="nc-icon nc-zoom-split" />
@@ -123,14 +163,25 @@ function Schedules() {
                 </InputGroup>
               </Col>
               <Col md={3}>
-                <button onClick={() => { setMode("add"); setCurrent({}) }} className="btn" style={{ width: "100%", marginTop: "20px", marginBottom: "20px" }}>
-                  <BsPlusSquareFill size={20} style={{ marginRight: "10px" }} />   Add Schedule
+                <button
+                  onClick={() => {
+                    setMode("add");
+                    setCurrent({});
+                  }}
+                  className="btn"
+                  style={{
+                    width: "100%",
+                    marginTop: "20px",
+                    marginBottom: "20px",
+                  }}
+                >
+                  <BsPlusSquareFill size={20} style={{ marginRight: "10px" }} />{" "}
+                  Add Schedule
                 </button>
               </Col>
             </Row>
             <Card>
               <CardBody>
-
                 <Table responsive>
                   <thead>
                     <tr>
@@ -148,31 +199,53 @@ function Schedules() {
                           <td>{items.end_date}</td>
                           <td>{items.week}</td>
                           <td>
-                            <button onClick={() => { setMode("view"); setCurrent(items) }} className="btn" style={{ margin: "0px", padding: "5px" }}>
+                            <button
+                              onClick={() => {
+                                setMode("view");
+                                setCurrent(items);
+                              }}
+                              className="btn"
+                              style={{ margin: "0px", padding: "5px" }}
+                            >
                               <BsEye size={20} /> View
                             </button>
                           </td>
                         </tr>
-                      )
+                      );
                     })}
                   </tbody>
                 </Table>
               </CardBody>
             </Card>
-            <RPagination pagination={pagination} setPagination={setPagination} />
+            <RPagination
+              pagination={pagination}
+              setPagination={setPagination}
+            />
           </>
-          : null
-        }
+        ) : null}
 
-        {mode === "add" ?
+        {mode === "add" ? (
           <>
             <Card className="card-user">
               <CardHeader>
                 <Row style={{ marginBottom: "-20px" }}>
-                  <Col><CardTitle tag="h5">Generate Schedule</CardTitle></Col>
+                  <Col>
+                    <CardTitle tag="h5">Generate Schedule</CardTitle>
+                  </Col>
                   <Col md={3}>
-                    <button onClick={() => { setMode("all"); setCurrent({}) }} className="btn" style={{ width: "100%", marginTop: "20px", marginBottom: "20px" }}>
-                      <BsArrowBarLeft size={20} />   Back to Schedules
+                    <button
+                      onClick={() => {
+                        setMode("all");
+                        setCurrent({});
+                      }}
+                      className="btn"
+                      style={{
+                        width: "100%",
+                        marginTop: "20px",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      <BsArrowBarLeft size={20} /> Back to Schedules
                     </button>
                   </Col>
                 </Row>
@@ -193,24 +266,15 @@ function Schedules() {
                     <Col className="px-1" md="4">
                       <FormGroup>
                         <label>End Date</label>
-                        <Input
-                          value={date.last}
-                          type="date"
-                          disabled={true}
-                        />
+                        <Input value={date.last} type="date" disabled={true} />
                       </FormGroup>
                     </Col>
                     <Col className="pl-1" md="4">
                       <FormGroup>
                         <label>Week</label>
-                        <Input
-                          value={date.week}
-                          type="text"
-                          disabled={true}
-                        />
+                        <Input value={date.week} type="text" disabled={true} />
                       </FormGroup>
                     </Col>
-
                   </Row>
                   <Row>
                     <div className="update ml-auto mr-auto">
@@ -228,12 +292,18 @@ function Schedules() {
               </CardBody>
             </Card>
           </>
-          : null
-        }
+        ) : null}
 
-        {mode === "view" ?
+        {mode === "view" ? (
           <>
-            <button onClick={() => { setMode("all"); setCurrent({}) }} className="btn" style={{ margin: "0px", padding: "10px", marginBottom: "15px" }}>
+            <button
+              onClick={() => {
+                setMode("all");
+                setCurrent({});
+              }}
+              className="btn"
+              style={{ margin: "0px", padding: "10px", marginBottom: "15px" }}
+            >
               <BsArrowBarLeft size={20} /> Back to Views
             </button>
 
@@ -252,7 +322,9 @@ function Schedules() {
                         {Object.values(current.schedule).map((items, key) => {
                           return (
                             <tr key={key}>
-                              <td>{key + 1} - {days[key]}</td>
+                              <td>
+                                {key + 1} - {days[key]}
+                              </td>
                               <td>
                                 <>
                                   {items.map((stf, index) => {
@@ -260,12 +332,12 @@ function Schedules() {
                                       <span key={index}>
                                         {stf.name},<br />
                                       </span>
-                                    )
+                                    );
                                   })}
                                 </>
-                              </td >
+                              </td>
                             </tr>
-                          )
+                          );
                         })}
                       </tbody>
                     </Table>
@@ -274,9 +346,7 @@ function Schedules() {
               </Col>
             </Row>
           </>
-          : null
-        }
-
+        ) : null}
       </div>
     </>
   );

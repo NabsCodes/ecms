@@ -31,6 +31,6 @@ var routes = [
     icon: "nc-icon nc-single-02",
     component: UserPage,
     layout: "/caregiver",
-  }
+  },
 ];
 export default routes;

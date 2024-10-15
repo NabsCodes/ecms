@@ -42,7 +42,7 @@ const CompanyInfo = tw.div``;
 const Divider = tw.div`my-8 border-b-2 border-gray-800`;
 export default () => {
   return (
-    <Container id="contact" >
+    <Container id="contact">
       <Content>
         <FiveColumns>
           <CompanyColumn>
@@ -51,7 +51,8 @@ export default () => {
               <LogoText>ECMS.</LogoText>
             </LogoContainer>
             <CompanyAddress>
-              98 Lamido Zubairu Way Yola Township bypass, PMB 2250, Yola Adamawa State, Nigeria
+              98 Lamido Zubairu Way Yola Township bypass, PMB 2250, Yola Adamawa
+              State, Nigeria
             </CompanyAddress>
             <SocialLinksContainer>
               <SocialLink href="https://facebook.com">
@@ -86,13 +87,10 @@ export default () => {
           <Column>
             <ColumnHeading>Contact</ColumnHeading>
             <LinkList>
-              <LinkListItem>
-                +1 (234) (567)-8901
-              </LinkListItem>
+              <LinkListItem>+1 (234) (567)-8901</LinkListItem>
               <LinkListItem>
                 <Link href="mailto:support@servana.com">support@ecms.com</Link>
               </LinkListItem>
-
             </LinkList>
           </Column>
         </FiveColumns>

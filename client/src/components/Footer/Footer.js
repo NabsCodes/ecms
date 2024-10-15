@@ -9,9 +9,7 @@ function Footer(props) {
       <Container fluid={props.fluid ? true : false}>
         <Row>
           <div className="credits ml-auto">
-            <div className="copyright">
-              &copy; {new Date().getFullYear()}
-            </div>
+            <div className="copyright">&copy; {new Date().getFullYear()}</div>
           </div>
         </Row>
       </Container>

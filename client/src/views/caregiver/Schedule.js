@@ -4,46 +4,52 @@ import { schedule } from "data/api";
 import Notifications from "components/Notification/Notification";
 
 // reactstrap components
-import {
-  Card,
-  CardBody,
-  Table,
-  Row,
-  Col,
-} from "reactstrap";
+import { Card, CardBody, Table, Row, Col } from "reactstrap";
 
 function Schedules() {
   const [notificationStatus, setNotificationStatus] = useState(false);
-  const [notificationDetails, setNotificationDetails] = useState({ msg: "", type: "" });
+  const [notificationDetails, setNotificationDetails] = useState({
+    msg: "",
+    type: "",
+  });
   const [current, setCurrent] = useState({});
-  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
 
   useEffect(
     () => {
       async function fetchSchedules() {
         await axios.get(schedule.showAllSchedules).then((response) => {
           if (response.data.status === true) {
-            if ((response.data.data)) {
+            if (response.data.data) {
               // eslint-disable-next-line array-callback-return
-              (response.data.data).map((x) => {
+              response.data.data.map((x) => {
                 if (checkDates(x.start_date, x.end_date)) {
                   setCurrent(x);
                 }
               });
-
             }
-          }
-          else {
-            setNotificationDetails({ msg: "Error Loading Schedules, Please Referesh The Page", type: "danger" });
+          } else {
+            setNotificationDetails({
+              msg: "Error Loading Schedules, Please Referesh The Page",
+              type: "danger",
+            });
             setNotificationStatus(true);
           }
         });
       }
       fetchSchedules();
-
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []);
+    [],
+  );
   // eslint-disable-next-line react-hooks/exhaustive-deps
 
   function checkDates(start1, end1) {
@@ -56,8 +62,18 @@ function Schedules() {
     const end = new Date(end1);
     let result = null;
 
-    console.log(start.toLocaleDateString(), end.toLocaleDateString(), date.toLocaleDateString());
-    if ((date > start && date < end) || (date.toLocaleDateString().substring(0, 10) === start.toLocaleDateString().substring(0, 10) || date.toLocaleDateString().substring(0, 10) === end.toLocaleDateString().substring(0, 10))) {
+    console.log(
+      start.toLocaleDateString(),
+      end.toLocaleDateString(),
+      date.toLocaleDateString(),
+    );
+    if (
+      (date > start && date < end) ||
+      date.toLocaleDateString().substring(0, 10) ===
+        start.toLocaleDateString().substring(0, 10) ||
+      date.toLocaleDateString().substring(0, 10) ===
+        end.toLocaleDateString().substring(0, 10)
+    ) {
       result = true;
     } else {
       result = false;
@@ -67,10 +83,11 @@ function Schedules() {
 
   return (
     <>
-      {notificationStatus === true ? <Notifications details={notificationDetails} /> : null}
+      {notificationStatus === true ? (
+        <Notifications details={notificationDetails} />
+      ) : null}
       <div className="content">
-
-        {current.schedule ?
+        {current.schedule ? (
           <Row>
             <Col col={12}>
               <Card className="card-user">
@@ -86,19 +103,16 @@ function Schedules() {
                       {Object.values(current.schedule).map((items, key) => {
                         return (
                           <tr key={key}>
-                            <td>{key + 1} - {days[key]}</td>
+                            <td>
+                              {key + 1} - {days[key]}
+                            </td>
                             <td>
                               <>
                                 {items.map((stf, index) => {
-                                  return (
-                                    <span key={index}>
-                                      {stf.name},
-                                    </span>
-
-                                  );
+                                  return <span key={index}>{stf.name},</span>;
                                 })}
                               </>
-                            </td >
+                            </td>
                           </tr>
                         );
                       })}
@@ -108,13 +122,13 @@ function Schedules() {
               </Card>
             </Col>
           </Row>
-          :
+        ) : (
           <div style={{ textAlign: "center", fontSize: "25px" }}>
             <div style={{ textAlign: "center", fontSize: "25px" }}>
               No schedule generated for this week yet...
             </div>
           </div>
-        }
+        )}
       </div>
     </>
   );

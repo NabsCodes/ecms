@@ -6,41 +6,42 @@ import axios from "axios";
 import { user } from "data/api";
 import Schedules from "../caregiver/Schedule";
 // reactstrap components
-import {
-  Card,
-  CardBody,
-  CardTitle,
-  Row,
-  Col
-} from "reactstrap";
+import { Card, CardBody, CardTitle, Row, Col } from "reactstrap";
 import Contracts from "./Contract";
 // core components
-
 
 function Dashboard() {
   const [counts, setCounts] = useState({});
   const [notificationStatus, setNotificationStatus] = useState(false);
-  const [notificationDetails, setNotificationDetails] = useState({ msg: "", type: "" });
+  const [notificationDetails, setNotificationDetails] = useState({
+    msg: "",
+    type: "",
+  });
   useEffect(
     () => {
       async function fetchCounts() {
         await axios.get(user.getCounts).then((response) => {
           if (response.data.status === true) {
             setCounts(response.data.data);
-          }
-          else {
-            setNotificationDetails({ msg: "Error Loading Counts, Please Referesh The Page", type: "danger" });
+          } else {
+            setNotificationDetails({
+              msg: "Error Loading Counts, Please Referesh The Page",
+              type: "danger",
+            });
             setNotificationStatus(true);
           }
-        })
+        });
       }
       fetchCounts();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []);
+    [],
+  );
   return (
     <>
-      {notificationStatus === true ? <Notifications details={notificationDetails} /> : null}
+      {notificationStatus === true ? (
+        <Notifications details={notificationDetails} />
+      ) : null}
       <div className="content">
         <Row>
           <Col md={4}>
@@ -59,7 +60,6 @@ function Dashboard() {
                   </Col>
                 </Row>
               </CardBody>
-
             </Card>
           </Col>
           <Col md={4}>
@@ -78,7 +78,6 @@ function Dashboard() {
                   </Col>
                 </Row>
               </CardBody>
-
             </Card>
           </Col>
           <Col md={4}>
@@ -97,12 +96,10 @@ function Dashboard() {
                   </Col>
                 </Row>
               </CardBody>
-
             </Card>
           </Col>
         </Row>
         <Row>
-
           <Col md={6}>
             <h5>Contracts</h5>
             <Contracts isDashboard={true} />
@@ -112,8 +109,6 @@ function Dashboard() {
             <Schedules />
           </Col>
         </Row>
-
-
       </div>
     </>
   );

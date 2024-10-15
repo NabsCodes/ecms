@@ -13,5 +13,5 @@ export default function useAnimatedNavToggler() {
     cycleX();
   };
 
-  return {showNavLinks,animation, toggleNavbar }
+  return { showNavLinks, animation, toggleNavbar };
 }

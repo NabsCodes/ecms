@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import AuthContext from './contexts/AuthContext';
+import AuthContext from "./contexts/AuthContext";
 import Modal from "react-modal";
 
 import "bootstrap/dist/css/bootstrap.css";
@@ -17,5 +17,5 @@ ReactDOM.render(
       <App />
     </AuthContext>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById("root"),
 );

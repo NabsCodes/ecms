@@ -7,7 +7,6 @@ import Contract from "views/admin/Contract";
 import UserPage from "views/admin/User.js";
 import { FaFileInvoice, FaFileContract } from "react-icons/fa";
 
-
 var routes = [
   {
     path: "/dashboard",
@@ -59,6 +58,6 @@ var routes = [
     icon: "nc-icon nc-single-02",
     component: UserPage,
     layout: "/admin",
-  }
+  },
 ];
 export default routes;

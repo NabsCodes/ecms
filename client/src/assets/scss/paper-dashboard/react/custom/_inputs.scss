@@ -6,7 +6,7 @@ select.form-control:not([size]):not([multiple]) {
   height: unset;
 }
 // Input files - hide actual input - requires specific markup in the sample.
-.form-group input[type=file] {
+.form-group input[type="file"] {
   opacity: 1;
   position: unset;
   top: 0;

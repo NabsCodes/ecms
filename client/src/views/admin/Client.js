@@ -15,17 +15,26 @@ import {
   Table,
   Row,
   Col,
-  InputGroup, InputGroupAddon, InputGroupText, Input, Form, FormGroup, Button
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  Input,
+  Form,
+  FormGroup,
+  Button,
 } from "reactstrap";
 
 function Clients() {
   const [clients, setClients] = useState([]);
-  const [mode, setMode] = useState('all');
+  const [mode, setMode] = useState("all");
   const [current, setCurrent] = useState({});
   const [pagination, setPagination] = useState({ current: 1 });
-  const [search, setSearch] = useState('');
-  const [notificationStatus, setNotificationStatus] = useState(false)
-  const [notificationDetails, setNotificationDetails] = useState({ msg: "", type: "" });
+  const [search, setSearch] = useState("");
+  const [notificationStatus, setNotificationStatus] = useState(false);
+  const [notificationDetails, setNotificationDetails] = useState({
+    msg: "",
+    type: "",
+  });
 
   function getAge(dateString) {
     var ageInMilliseconds = new Date() - new Date(dateString);
@@ -35,88 +44,133 @@ function Clients() {
   useEffect(
     () => {
       async function fetchClients() {
-        await axios.get(user.showUsers + "/client", { params: { ...pagination, search } }).then((response) => {
-          if (response.data.status === true) {
-            setClients(response.data.data);
-            if (pagination.current === 1) setPagination({ ...pagination, count: response.data.count });
-          }
-          else {
-            setNotificationDetails({ msg: "Error Loading Clients, Please Referesh The Page", type: "danger" });
-            setNotificationStatus(true);
-          }
-        })
+        await axios
+          .get(user.showUsers + "/client", {
+            params: { ...pagination, search },
+          })
+          .then((response) => {
+            if (response.data.status === true) {
+              setClients(response.data.data);
+              if (pagination.current === 1)
+                setPagination({ ...pagination, count: response.data.count });
+            } else {
+              setNotificationDetails({
+                msg: "Error Loading Clients, Please Referesh The Page",
+                type: "danger",
+              });
+              setNotificationStatus(true);
+            }
+          });
       }
       fetchClients();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]);
+    [search],
+  );
   // eslint-disable-next-line react-hooks/exhaustive-deps
 
   async function addClient(e) {
     e.preventDefault();
-    await axios.post(user.addUser, { ...current, role: "client" }).then((res) => {
-      if (res.data.status) {
-        setNotificationDetails({ msg: "Client Added Successfully.", type: "success" });
-        setClients([...clients, res.data.data]);
-        setPagination({ ...pagination, count: pagination.count + 1 })
-        setCurrent({});
-        e.target.reset();
-      }
-      else {
-        setNotificationDetails({ msg: "Error adding client, ensure all fields are present.", type: "danger" });
-      }
-      setNotificationStatus(true);
-    }).catch((error) => {
-      if (error.response) {
-        setNotificationDetails({ msg: error.response.data.msg || "Error adding client, ensure all fields are present", type: "danger" });
+    await axios
+      .post(user.addUser, { ...current, role: "client" })
+      .then((res) => {
+        if (res.data.status) {
+          setNotificationDetails({
+            msg: "Client Added Successfully.",
+            type: "success",
+          });
+          setClients([...clients, res.data.data]);
+          setPagination({ ...pagination, count: pagination.count + 1 });
+          setCurrent({});
+          e.target.reset();
+        } else {
+          setNotificationDetails({
+            msg: "Error adding client, ensure all fields are present.",
+            type: "danger",
+          });
+        }
         setNotificationStatus(true);
-      } else {
-        setNotificationDetails({ msg: "Network Error!", type: "danger" });
-        setNotificationStatus(true);
-      }
-
-    });
+      })
+      .catch((error) => {
+        if (error.response) {
+          setNotificationDetails({
+            msg:
+              error.response.data.msg ||
+              "Error adding client, ensure all fields are present",
+            type: "danger",
+          });
+          setNotificationStatus(true);
+        } else {
+          setNotificationDetails({ msg: "Network Error!", type: "danger" });
+          setNotificationStatus(true);
+        }
+      });
   }
 
   async function updateClient(e) {
     e.preventDefault();
-    await axios.patch(user.updateUser + "/" + current._id, current).then((res) => {
-      if (res.data.status) {
-        setNotificationDetails({ msg: "Clients Updated Successfully.", type: "success" });
-      }
-      else {
-        setNotificationDetails({ msg: "Error updating Client.", type: "danger" });
-      }
-      setNotificationStatus(true);
-    }).catch((error) => {
-      if (error.response) {
-        setNotificationDetails({ msg: error.response.data.message, type: "danger" });
+    await axios
+      .patch(user.updateUser + "/" + current._id, current)
+      .then((res) => {
+        if (res.data.status) {
+          setNotificationDetails({
+            msg: "Clients Updated Successfully.",
+            type: "success",
+          });
+        } else {
+          setNotificationDetails({
+            msg: "Error updating Client.",
+            type: "danger",
+          });
+        }
         setNotificationStatus(true);
-      } else {
-        setNotificationDetails({ msg: "Network Error!", type: "danger" });
-        setNotificationStatus(true);
-      }
-
-    });
+      })
+      .catch((error) => {
+        if (error.response) {
+          setNotificationDetails({
+            msg: error.response.data.message,
+            type: "danger",
+          });
+          setNotificationStatus(true);
+        } else {
+          setNotificationDetails({ msg: "Network Error!", type: "danger" });
+          setNotificationStatus(true);
+        }
+      });
   }
   function getColor(status) {
     let temp = "orange";
-    if (status === "active") { temp = "#2ED47A"; }
-    if (status === "in-active") { temp = "red"; }
-    if (status === "on-leave") { temp = "orange"; }
+    if (status === "active") {
+      temp = "#2ED47A";
+    }
+    if (status === "in-active") {
+      temp = "red";
+    }
+    if (status === "on-leave") {
+      temp = "orange";
+    }
     return temp;
   }
   return (
     <>
-      {notificationStatus === true ? <Notifications details={notificationDetails} /> : null}
+      {notificationStatus === true ? (
+        <Notifications details={notificationDetails} />
+      ) : null}
       <div className="content">
-        {mode === "all" ?
+        {mode === "all" ? (
           <>
             <Row style={{ marginTop: "-30px" }}>
-              <Col style={{ padding: "20px" }}><h5>Total: {pagination.count || 0}</h5></Col>
+              <Col style={{ padding: "20px" }}>
+                <h5>Total: {pagination.count || 0}</h5>
+              </Col>
               <Col style={{ paddingTop: "22px" }}>
                 <InputGroup style={{ borderColor: "#ccc" }}>
-                  <Input placeholder="Search..." onChange={(e) => { setSearch(e.target.value) }} />
+                  <Input
+                    placeholder="Search..."
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                    }}
+                  />
                   <InputGroupAddon addonType="append">
                     <InputGroupText>
                       <i className="nc-icon nc-zoom-split" />
@@ -125,14 +179,25 @@ function Clients() {
                 </InputGroup>
               </Col>
               <Col md={3}>
-                <button onClick={() => { setMode("add"); setCurrent({}) }} className="btn" style={{ width: "100%", marginTop: "20px", marginBottom: "20px" }}>
-                  <BsPlusSquareFill size={20} style={{ marginRight: "10px" }} />   Add Client
+                <button
+                  onClick={() => {
+                    setMode("add");
+                    setCurrent({});
+                  }}
+                  className="btn"
+                  style={{
+                    width: "100%",
+                    marginTop: "20px",
+                    marginBottom: "20px",
+                  }}
+                >
+                  <BsPlusSquareFill size={20} style={{ marginRight: "10px" }} />{" "}
+                  Add Client
                 </button>
               </Col>
             </Row>
             <Card>
               <CardBody>
-
                 <Table responsive>
                   <thead>
                     <tr>
@@ -149,36 +214,65 @@ function Clients() {
                           <td>{items.first_name + " " + items.last_name}</td>
                           <td>{items.email}</td>
                           <td>
-                            <div style={{ backgroundColor: getColor(items.status), textAlign: "center", borderRadius: "15px", padding: "3px" }}>
+                            <div
+                              style={{
+                                backgroundColor: getColor(items.status),
+                                textAlign: "center",
+                                borderRadius: "15px",
+                                padding: "3px",
+                              }}
+                            >
                               {items.status}
                             </div>
                           </td>
                           <td>
-                            <button onClick={() => { setMode("view"); setCurrent(items) }} className="btn" style={{ margin: "0px", padding: "5px" }}>
+                            <button
+                              onClick={() => {
+                                setMode("view");
+                                setCurrent(items);
+                              }}
+                              className="btn"
+                              style={{ margin: "0px", padding: "5px" }}
+                            >
                               <BsEye size={20} /> View
                             </button>
                           </td>
                         </tr>
-                      )
+                      );
                     })}
                   </tbody>
                 </Table>
               </CardBody>
             </Card>
-            <RPagination pagination={pagination} setPagination={setPagination} />
+            <RPagination
+              pagination={pagination}
+              setPagination={setPagination}
+            />
           </>
-          : null
-        }
+        ) : null}
 
-        {mode === "add" ?
+        {mode === "add" ? (
           <>
             <Card className="card-user">
               <CardHeader>
                 <Row style={{ marginBottom: "-20px" }}>
-                  <Col><CardTitle tag="h5">Add Client</CardTitle></Col>
+                  <Col>
+                    <CardTitle tag="h5">Add Client</CardTitle>
+                  </Col>
                   <Col md={3}>
-                    <button onClick={() => { setMode("all"); setCurrent({}) }} className="btn" style={{ width: "100%", marginTop: "20px", marginBottom: "20px" }}>
-                      <BsArrowBarLeft size={20} />   Back to Clients
+                    <button
+                      onClick={() => {
+                        setMode("all");
+                        setCurrent({});
+                      }}
+                      className="btn"
+                      style={{
+                        width: "100%",
+                        marginTop: "20px",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      <BsArrowBarLeft size={20} /> Back to Clients
                     </button>
                   </Col>
                 </Row>
@@ -193,7 +287,12 @@ function Clients() {
                           defaultValue={current.first_name}
                           placeholder="John"
                           type="text"
-                          onChange={(e) => setCurrent({ ...current, first_name: e.target.value })}
+                          onChange={(e) =>
+                            setCurrent({
+                              ...current,
+                              first_name: e.target.value,
+                            })
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -204,7 +303,12 @@ function Clients() {
                           defaultValue={current.last_name}
                           placeholder="Doe"
                           type="text"
-                          onChange={(e) => setCurrent({ ...current, last_name: e.target.value })}
+                          onChange={(e) =>
+                            setCurrent({
+                              ...current,
+                              last_name: e.target.value,
+                            })
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -215,7 +319,9 @@ function Clients() {
                         <label>Email</label>
                         <Input
                           defaultValue={current.email}
-                          onChange={(e) => setCurrent({ ...current, email: e.target.value })}
+                          onChange={(e) =>
+                            setCurrent({ ...current, email: e.target.value })
+                          }
                           placeholder="Email: ena@gmail.com"
                           type="text"
                         />
@@ -223,14 +329,14 @@ function Clients() {
                     </Col>
                     <Col className="pl-1" md="6">
                       <FormGroup>
-                        <label htmlFor="exal1">
-                          Phone
-                        </label>
+                        <label htmlFor="exal1">Phone</label>
                         <Input
                           placeholder="Phone"
                           type="text"
                           defaultValue={current.phone}
-                          onChange={(e) => setCurrent({ ...current, phone: e.target.value })}
+                          onChange={(e) =>
+                            setCurrent({ ...current, phone: e.target.value })
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -243,7 +349,9 @@ function Clients() {
                         <Input
                           defaultValue={current.dob}
                           type="date"
-                          onChange={(e) => setCurrent({ ...current, dob: e.target.value })}
+                          onChange={(e) =>
+                            setCurrent({ ...current, dob: e.target.value })
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -253,32 +361,48 @@ function Clients() {
                         <Input
                           placeholder="Home Address"
                           type="text"
-                          onChange={(e) => setCurrent({ ...current, address: e.target.value })}
+                          onChange={(e) =>
+                            setCurrent({ ...current, address: e.target.value })
+                          }
                         />
                       </FormGroup>
                     </Col>
-
                   </Row>
                   <hr></hr>
                   <h6> Medical</h6>
 
                   <Row>
-                  <Col className="pr-1" md="3">
+                    <Col className="pr-1" md="3">
                       <FormGroup>
                         <label>Blood Group</label>
                         <Input
                           placeholder="Relationship"
                           type="select"
-                          onChange={(e) => setCurrent({ ...current, Medical: { ...current.Medical, blood_group: e.target.value } })}
+                          onChange={(e) =>
+                            setCurrent({
+                              ...current,
+                              Medical: {
+                                ...current.Medical,
+                                blood_group: e.target.value,
+                              },
+                            })
+                          }
                         >
-                          <option disabled selected>Select Relative...</option>
-                          {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+","O-"].map((stat, key) => {
-                            return (
-                              <option key={key}>{stat}</option>
-                            )
+                          <option disabled selected>
+                            Select Relative...
+                          </option>
+                          {[
+                            "A+",
+                            "A-",
+                            "B+",
+                            "B-",
+                            "AB+",
+                            "AB-",
+                            "O+",
+                            "O-",
+                          ].map((stat, key) => {
+                            return <option key={key}>{stat}</option>;
                           })}
-
-
                         </Input>
                       </FormGroup>
                     </Col>
@@ -288,43 +412,61 @@ function Clients() {
                         <Input
                           placeholder="Genotype"
                           type="select"
-                          onChange={(e) => setCurrent({ ...current, Medical: { ...current.Medical, genotype: e.target.value } })}
+                          onChange={(e) =>
+                            setCurrent({
+                              ...current,
+                              Medical: {
+                                ...current.Medical,
+                                genotype: e.target.value,
+                              },
+                            })
+                          }
                         >
-                          <option disabled selected>Select Genotype...</option>
-                          {["AA", "AS", "AC", "SS","SC"].map((stat, key) => {
-                            return (
-                              <option key={key}>{stat}</option>
-                            )
+                          <option disabled selected>
+                            Select Genotype...
+                          </option>
+                          {["AA", "AS", "AC", "SS", "SC"].map((stat, key) => {
+                            return <option key={key}>{stat}</option>;
                           })}
-
-
                         </Input>
                       </FormGroup>
                     </Col>
 
                     <Col className="pl-1" md="6">
                       <FormGroup>
-                        <label htmlFor="example">
-                          Allergies?
-                        </label>
+                        <label htmlFor="example">Allergies?</label>
                         <Input
                           placeholder="Allergies"
                           type="text"
                           defaultValue={current?.Medical?.allergy}
-                          onChange={(e) => setCurrent({ ...current, Medical: { ...current.Medical, allergy: e.target.value } })}
+                          onChange={(e) =>
+                            setCurrent({
+                              ...current,
+                              Medical: {
+                                ...current.Medical,
+                                allergy: e.target.value,
+                              },
+                            })
+                          }
                         />
                       </FormGroup>
                     </Col>
-                    <Col  md="12">
+                    <Col md="12">
                       <FormGroup>
-                        <label htmlFor="exampleInpu">
-                          Others
-                        </label>
+                        <label htmlFor="exampleInpu">Others</label>
                         <Input
                           placeholder="Other Info"
                           type="text"
                           defaultValue={current?.Medical?.others}
-                          onChange={(e) => setCurrent({ ...current, Medical: { ...current.Medical, others: e.target.value } })}
+                          onChange={(e) =>
+                            setCurrent({
+                              ...current,
+                              Medical: {
+                                ...current.Medical,
+                                others: e.target.value,
+                              },
+                            })
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -339,7 +481,15 @@ function Clients() {
                           defaultValue={current?.NextOfKin?.name}
                           placeholder="John"
                           type="text"
-                          onChange={(e) => setCurrent({ ...current, NextOfKin: { ...current.NextOfKin, name: e.target.value } })}
+                          onChange={(e) =>
+                            setCurrent({
+                              ...current,
+                              NextOfKin: {
+                                ...current.NextOfKin,
+                                name: e.target.value,
+                              },
+                            })
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -350,7 +500,15 @@ function Clients() {
                           defaultValue={current?.NextOfKin?.phone}
                           placeholder="090..."
                           type="text"
-                          onChange={(e) => setCurrent({ ...current, NextOfKin: { ...current.NextOfKin, phone: e.target.value } })}
+                          onChange={(e) =>
+                            setCurrent({
+                              ...current,
+                              NextOfKin: {
+                                ...current.NextOfKin,
+                                phone: e.target.value,
+                              },
+                            })
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -361,7 +519,15 @@ function Clients() {
                           defaultValue={current?.NextOfKin?.address}
                           placeholder="98 Ahmadu Zubairu Way"
                           type="text"
-                          onChange={(e) => setCurrent({ ...current, NextOfKin: { ...current.NextOfKin, address: e.target.value } })}
+                          onChange={(e) =>
+                            setCurrent({
+                              ...current,
+                              NextOfKin: {
+                                ...current.NextOfKin,
+                                address: e.target.value,
+                              },
+                            })
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -371,16 +537,30 @@ function Clients() {
                         <Input
                           placeholder="Relationship"
                           type="select"
-                          onChange={(e) => setCurrent({ ...current, NextOfKin: { ...current.NextOfKin, relationship: e.target.value } })}
+                          onChange={(e) =>
+                            setCurrent({
+                              ...current,
+                              NextOfKin: {
+                                ...current.NextOfKin,
+                                relationship: e.target.value,
+                              },
+                            })
+                          }
                         >
-                          <option disabled selected>Select Relative...</option>
-                          {["Father", "Mother", "Brother", "Sister", "Cousin", "Relative", "Friend"].map((stat, key) => {
-                            return (
-                              <option key={key}>{stat}</option>
-                            )
+                          <option disabled selected>
+                            Select Relative...
+                          </option>
+                          {[
+                            "Father",
+                            "Mother",
+                            "Brother",
+                            "Sister",
+                            "Cousin",
+                            "Relative",
+                            "Friend",
+                          ].map((stat, key) => {
+                            return <option key={key}>{stat}</option>;
                           })}
-
-
                         </Input>
                       </FormGroup>
                     </Col>
@@ -395,7 +575,15 @@ function Clients() {
                           defaultValue={current?.EmergencyContact?.name}
                           placeholder="John Doe"
                           type="text"
-                          onChange={(e) => setCurrent({ ...current, EmergencyContact: { ...current.EmergencyContact, name: e.target.value } })}
+                          onChange={(e) =>
+                            setCurrent({
+                              ...current,
+                              EmergencyContact: {
+                                ...current.EmergencyContact,
+                                name: e.target.value,
+                              },
+                            })
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -406,7 +594,15 @@ function Clients() {
                           defaultValue={current?.EmergencyContact?.phone}
                           placeholder="090....."
                           type="text"
-                          onChange={(e) => setCurrent({ ...current, EmergencyContact: { ...current.EmergencyContact, phone: e.target.value } })}
+                          onChange={(e) =>
+                            setCurrent({
+                              ...current,
+                              EmergencyContact: {
+                                ...current.EmergencyContact,
+                                phone: e.target.value,
+                              },
+                            })
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -417,7 +613,15 @@ function Clients() {
                           defaultValue={current?.EmergencyContact?.address}
                           placeholder="98 Ahmadu Zubairu Way"
                           type="text"
-                          onChange={(e) => setCurrent({ ...current, EmergencyContact: { ...current.EmergencyContact, address: e.target.value } })}
+                          onChange={(e) =>
+                            setCurrent({
+                              ...current,
+                              EmergencyContact: {
+                                ...current.EmergencyContact,
+                                address: e.target.value,
+                              },
+                            })
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -427,16 +631,29 @@ function Clients() {
                         <Input
                           placeholder="Relationship"
                           type="select"
-                          onChange={(e) => setCurrent({ ...current, EmergencyContact: { ...current.EmergencyContact, relationship: e.target.value } })}
+                          onChange={(e) =>
+                            setCurrent({
+                              ...current,
+                              EmergencyContact: {
+                                ...current.EmergencyContact,
+                                relationship: e.target.value,
+                              },
+                            })
+                          }
                         >
-                          <option disabled selected>Select Relative...</option>
-                          {["Father", "Mother", "Brother", "Sister", "Cousin", "Relative"].map((stat, key) => {
-                            return (
-                              <option key={key}>{stat}</option>
-                            )
+                          <option disabled selected>
+                            Select Relative...
+                          </option>
+                          {[
+                            "Father",
+                            "Mother",
+                            "Brother",
+                            "Sister",
+                            "Cousin",
+                            "Relative",
+                          ].map((stat, key) => {
+                            return <option key={key}>{stat}</option>;
                           })}
-
-
                         </Input>
                       </FormGroup>
                     </Col>
@@ -449,7 +666,9 @@ function Clients() {
                           defaultValue={current.password}
                           placeholder="*****"
                           type="password"
-                          onChange={(e) => setCurrent({ ...current, password: e.target.value })}
+                          onChange={(e) =>
+                            setCurrent({ ...current, password: e.target.value })
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -470,12 +689,18 @@ function Clients() {
               </CardBody>
             </Card>
           </>
-          : null
-        }
+        ) : null}
 
-        {mode === "view" ?
+        {mode === "view" ? (
           <>
-            <button onClick={() => { setMode("all"); setCurrent({}) }} className="btn" style={{ margin: "0px", padding: "10px", marginBottom: "15px" }}>
+            <button
+              onClick={() => {
+                setMode("all");
+                setCurrent({});
+              }}
+              className="btn"
+              style={{ margin: "0px", padding: "10px", marginBottom: "15px" }}
+            >
               <BsArrowBarLeft size={20} /> Back to Clients
             </button>
 
@@ -483,9 +708,13 @@ function Clients() {
               <Col md={8}>
                 <Card className="card-user">
                   <div style={{ textAlign: "center" }}>
-                    <h4 style={{ marginTop: "10px" }}>{current.first_name + " " + current.last_name}</h4>
+                    <h4 style={{ marginTop: "10px" }}>
+                      {current.first_name + " " + current.last_name}
+                    </h4>
                     <FaUserCircle size={100} />
-                    <h5 style={{ marginTop: "10px" }}>{getAge(current.dob) + " Years Old"}</h5>
+                    <h5 style={{ marginTop: "10px" }}>
+                      {getAge(current.dob) + " Years Old"}
+                    </h5>
                   </div>
 
                   <CardBody>
@@ -498,7 +727,12 @@ function Clients() {
                               defaultValue={current.first_name}
                               placeholder="John"
                               type="text"
-                              onChange={(e) => setCurrent({ ...current, first_name: e.target.value })}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  first_name: e.target.value,
+                                })
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -509,7 +743,12 @@ function Clients() {
                               defaultValue={current.last_name}
                               placeholder="Doe"
                               type="text"
-                              onChange={(e) => setCurrent({ ...current, last_name: e.target.value })}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  last_name: e.target.value,
+                                })
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -520,7 +759,12 @@ function Clients() {
                             <label>Email</label>
                             <Input
                               defaultValue={current.email}
-                              onChange={(e) => setCurrent({ ...current, email: e.target.value })}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  email: e.target.value,
+                                })
+                              }
                               placeholder="Email: ena@gmail.com"
                               type="text"
                             />
@@ -528,14 +772,17 @@ function Clients() {
                         </Col>
                         <Col className="pl-1" md="6">
                           <FormGroup>
-                            <label htmlFor="exampleInputEmail1">
-                              Phone
-                            </label>
+                            <label htmlFor="exampleInputEmail1">Phone</label>
                             <Input
                               placeholder="Phone"
                               type="text"
                               defaultValue={current.phone}
-                              onChange={(e) => setCurrent({ ...current, phone: e.target.value })}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  phone: e.target.value,
+                                })
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -548,7 +795,9 @@ function Clients() {
                             <Input
                               defaultValue={current.dob}
                               type="date"
-                              onChange={(e) => setCurrent({ ...current, dob: e.target.value })}
+                              onChange={(e) =>
+                                setCurrent({ ...current, dob: e.target.value })
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -558,16 +807,29 @@ function Clients() {
                             <Input
                               placeholder="Status"
                               type="select"
-                              onChange={(e) => setCurrent({ ...current, status: e.target.value })}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  status: e.target.value,
+                                })
+                              }
                             >
                               <option>{current.status}</option>
-                              {["active", 'suspended', "on-leave", "suspended", "in-active"].map((stat, key) => {
+                              {[
+                                "active",
+                                "suspended",
+                                "on-leave",
+                                "suspended",
+                                "in-active",
+                              ].map((stat, key) => {
                                 return (
-                                  <>{current.status !== stat ? <option>{stat}</option> : null}</>
-                                )
+                                  <>
+                                    {current.status !== stat ? (
+                                      <option>{stat}</option>
+                                    ) : null}
+                                  </>
+                                );
                               })}
-
-
                             </Input>
                           </FormGroup>
                         </Col>
@@ -578,82 +840,124 @@ function Clients() {
                               defaultValue={current.address}
                               placeholder="Home Address"
                               type="text"
-                              onChange={(e) => setCurrent({ ...current, address: e.target.value })}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  address: e.target.value,
+                                })
+                              }
                             />
                           </FormGroup>
                         </Col>
                       </Row>
 
                       <hr></hr>
-                  <h6> Medical</h6>
+                      <h6> Medical</h6>
 
-                  <Row>
-                  <Col className="pr-1" md="3">
-                      <FormGroup>
-                        <label>Blood Group</label>
-                        <Input
-                          placeholder="Relationship"
-                          type="select"
-                          onChange={(e) => setCurrent({ ...current, Medical: { ...current.Medical, blood_group: e.target.value } })}
-                        >
-                          <option disabled selected>{current?.Medical?.blood_group||"Select Blood Group..."}</option>
-                          {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+","O-"].map((stat, key) => {
-                            return (
-                              <option key={key}>{stat}</option>
-                            )
-                          })}
+                      <Row>
+                        <Col className="pr-1" md="3">
+                          <FormGroup>
+                            <label>Blood Group</label>
+                            <Input
+                              placeholder="Relationship"
+                              type="select"
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  Medical: {
+                                    ...current.Medical,
+                                    blood_group: e.target.value,
+                                  },
+                                })
+                              }
+                            >
+                              <option disabled selected>
+                                {current?.Medical?.blood_group ||
+                                  "Select Blood Group..."}
+                              </option>
+                              {[
+                                "A+",
+                                "A-",
+                                "B+",
+                                "B-",
+                                "AB+",
+                                "AB-",
+                                "O+",
+                                "O-",
+                              ].map((stat, key) => {
+                                return <option key={key}>{stat}</option>;
+                              })}
+                            </Input>
+                          </FormGroup>
+                        </Col>
+                        <Col className="px-1" md="3">
+                          <FormGroup>
+                            <label>Genotype</label>
+                            <Input
+                              placeholder="Genotype"
+                              type="select"
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  Medical: {
+                                    ...current.Medical,
+                                    genotype: e.target.value,
+                                  },
+                                })
+                              }
+                            >
+                              <option disabled selected>
+                                {current?.Medical?.genotype ||
+                                  "Select Genotype..."}
+                              </option>
+                              {["AA", "AS", "AC", "SS", "SC"].map(
+                                (stat, key) => {
+                                  return <option key={key}>{stat}</option>;
+                                },
+                              )}
+                            </Input>
+                          </FormGroup>
+                        </Col>
 
-
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                    <Col className="px-1" md="3">
-                      <FormGroup>
-                        <label>Genotype</label>
-                        <Input
-                          placeholder="Genotype"
-                          type="select"
-                          onChange={(e) => setCurrent({ ...current, Medical: { ...current.Medical, genotype: e.target.value } })}
-                        >
-                          <option disabled selected>{current?.Medical?.genotype||"Select Genotype..."}</option>
-                          {["AA", "AS", "AC", "SS","SC"].map((stat, key) => {
-                            return (
-                              <option key={key}>{stat}</option>
-                            )
-                          })}
-
-
-                        </Input>
-                      </FormGroup>
-                    </Col>
-
-                    <Col className="pl-1" md="6">
-                      <FormGroup>
-                        <label htmlFor="exaple">
-                          Allergies?
-                        </label>
-                        <Input
-                          placeholder="Allergies"
-                          type="text"
-                          defaultValue={current?.Medical?.allergy}
-                          onChange={(e) => setCurrent({ ...current, Medical: { ...current.Medical, allergy: e.target.value } })}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col  md="12">
-                      <FormGroup>
-                        <label htmlFor="exampleInpu">
-                          Others
-                        </label>
-                        <Input
-                          placeholder="Other Info"
-                          type="text"
-                          defaultValue={current?.Medical?.others}
-                          onChange={(e) => setCurrent({ ...current, Medical: { ...current.Medical, others: e.target.value } })}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
+                        <Col className="pl-1" md="6">
+                          <FormGroup>
+                            <label htmlFor="exaple">Allergies?</label>
+                            <Input
+                              placeholder="Allergies"
+                              type="text"
+                              defaultValue={current?.Medical?.allergy}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  Medical: {
+                                    ...current.Medical,
+                                    allergy: e.target.value,
+                                  },
+                                })
+                              }
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col md="12">
+                          <FormGroup>
+                            <label htmlFor="exampleInpu">Others</label>
+                            <Input
+                              placeholder="Other Info"
+                              type="text"
+                              defaultValue={current?.Medical?.others}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  Medical: {
+                                    ...current.Medical,
+                                    others: e.target.value,
+                                  },
+                                })
+                              }
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
                       <hr></hr>
                       <h6> Next of Kin</h6>
                       <Row>
@@ -664,7 +968,15 @@ function Clients() {
                               defaultValue={current?.NextOfKin?.name}
                               placeholder="John"
                               type="text"
-                              onChange={(e) => setCurrent({ ...current, NextOfKin: { ...current.NextOfKin, name: e.target.value } })}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  NextOfKin: {
+                                    ...current.NextOfKin,
+                                    name: e.target.value,
+                                  },
+                                })
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -675,7 +987,15 @@ function Clients() {
                               defaultValue={current?.NextOfKin?.phone}
                               placeholder="090..."
                               type="text"
-                              onChange={(e) => setCurrent({ ...current, NextOfKin: { ...current.NextOfKin, phone: e.target.value } })}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  NextOfKin: {
+                                    ...current.NextOfKin,
+                                    phone: e.target.value,
+                                  },
+                                })
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -686,7 +1006,15 @@ function Clients() {
                               defaultValue={current?.NextOfKin?.address}
                               placeholder="98 Ahmadu Zubairu Way"
                               type="text"
-                              onChange={(e) => setCurrent({ ...current, NextOfKin: { ...current.NextOfKin, address: e.target.value } })}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  NextOfKin: {
+                                    ...current.NextOfKin,
+                                    address: e.target.value,
+                                  },
+                                })
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -696,16 +1024,38 @@ function Clients() {
                             <Input
                               placeholder="Relationship"
                               type="select"
-                              onChange={(e) => setCurrent({ ...current, NextOfKin: { ...current.NextOfKin, relationship: e.target.value } })}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  NextOfKin: {
+                                    ...current.NextOfKin,
+                                    relationship: e.target.value,
+                                  },
+                                })
+                              }
                             >
-                              <option>{current?.NextOfKin?.relationship || "Select Relationship..."}</option>
-                              {["Father", "Mother", "Brother", "Sister", "Cousin", "Relative", "friend"].map((stat, key) => {
+                              <option>
+                                {current?.NextOfKin?.relationship ||
+                                  "Select Relationship..."}
+                              </option>
+                              {[
+                                "Father",
+                                "Mother",
+                                "Brother",
+                                "Sister",
+                                "Cousin",
+                                "Relative",
+                                "friend",
+                              ].map((stat, key) => {
                                 return (
-                                  <>{current?.NextOfKin?.relationship !== stat ? <option>{stat}</option> : null}</>
-                                )
+                                  <>
+                                    {current?.NextOfKin?.relationship !==
+                                    stat ? (
+                                      <option>{stat}</option>
+                                    ) : null}
+                                  </>
+                                );
                               })}
-
-
                             </Input>
                           </FormGroup>
                         </Col>
@@ -720,7 +1070,15 @@ function Clients() {
                               defaultValue={current?.EmergencyContact?.name}
                               placeholder="John Doe"
                               type="text"
-                              onChange={(e) => setCurrent({ ...current, EmergencyContact: { ...current.EmergencyContact, name: e.target.value } })}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  EmergencyContact: {
+                                    ...current.EmergencyContact,
+                                    name: e.target.value,
+                                  },
+                                })
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -731,7 +1089,15 @@ function Clients() {
                               defaultValue={current?.EmergencyContact?.phone}
                               placeholder="090....."
                               type="text"
-                              onChange={(e) => setCurrent({ ...current, EmergencyContact: { ...current.EmergencyContact, phone: e.target.value } })}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  EmergencyContact: {
+                                    ...current.EmergencyContact,
+                                    phone: e.target.value,
+                                  },
+                                })
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -742,7 +1108,15 @@ function Clients() {
                               defaultValue={current?.EmergencyContact?.address}
                               placeholder="98 Ahmadu Zubairu Way"
                               type="text"
-                              onChange={(e) => setCurrent({ ...current, EmergencyContact: { ...current.EmergencyContact, address: e.target.value } })}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  EmergencyContact: {
+                                    ...current.EmergencyContact,
+                                    address: e.target.value,
+                                  },
+                                })
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -752,16 +1126,38 @@ function Clients() {
                             <Input
                               placeholder="Relationship"
                               type="select"
-                              onChange={(e) => setCurrent({ ...current, EmergencyContact: { ...current.EmergencyContact, relationship: e.target.value } })}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  EmergencyContact: {
+                                    ...current.EmergencyContact,
+                                    relationship: e.target.value,
+                                  },
+                                })
+                              }
                             >
-                              <option>{current?.EmergencyContact?.relationship || "Select Relationship"}</option>
-                              {["Father", "Mother", "Brother", "Sister", "Cousin", "Relative", "Friend"].map((stat, key) => {
+                              <option>
+                                {current?.EmergencyContact?.relationship ||
+                                  "Select Relationship"}
+                              </option>
+                              {[
+                                "Father",
+                                "Mother",
+                                "Brother",
+                                "Sister",
+                                "Cousin",
+                                "Relative",
+                                "Friend",
+                              ].map((stat, key) => {
                                 return (
-                                  <>{current?.EmergencyContact?.relationship !== stat ? <option>{stat}</option> : null}</>
-                                )
+                                  <>
+                                    {current?.EmergencyContact?.relationship !==
+                                    stat ? (
+                                      <option>{stat}</option>
+                                    ) : null}
+                                  </>
+                                );
                               })}
-
-
                             </Input>
                           </FormGroup>
                         </Col>
@@ -773,7 +1169,12 @@ function Clients() {
                             <Input
                               placeholder="*****"
                               type="password"
-                              onChange={(e) => setCurrent({ ...current, password: e.target.value })}
+                              onChange={(e) =>
+                                setCurrent({
+                                  ...current,
+                                  password: e.target.value,
+                                })
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -797,20 +1198,17 @@ function Clients() {
               <Col md={4}>
                 <Card className="card-user">
                   <div style={{ textAlign: "center" }}>
-                    <h4 style={{ marginTop: "10px" }}>Elderly Monitoring Contract</h4>
-
+                    <h4 style={{ marginTop: "10px" }}>
+                      Elderly Monitoring Contract
+                    </h4>
                   </div>
 
-                  <CardBody>
-
-                  </CardBody>
+                  <CardBody></CardBody>
                 </Card>
               </Col>
             </Row>
           </>
-          : null
-        }
-
+        ) : null}
       </div>
     </>
   );

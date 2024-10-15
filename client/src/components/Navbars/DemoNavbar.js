@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useAuth } from '../../contexts/AuthContext';
-import { FaUserCircle } from 'react-icons/fa';
+import { useAuth } from "../../contexts/AuthContext";
+import { FaUserCircle } from "react-icons/fa";
 import { AiFillCloseCircle } from "react-icons/ai";
-import Modal from 'react-modal';
+import Modal from "react-modal";
 
 import logo from "../../assets/img/logo.png";
 import {
@@ -15,23 +15,22 @@ import {
   NavItem,
   Container,
   Col,
-  Row, Button
+  Row,
+  Button,
 } from "reactstrap";
-
 
 function Header({ props, routes }) {
   const customStyles = {
     content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
     },
   };
   const [modalIsOpen, setIsModalOpen] = useState(false);
-
 
   const [isOpen, setIsOpen] = React.useState(false);
   const [color, setColor] = React.useState("transparent");
@@ -90,8 +89,7 @@ function Header({ props, routes }) {
     } catch (e) {
       alert(e);
     }
-
-  };
+  }
   return (
     // add or remove classes depending if we are on full-screen-maps page or not
     <Navbar
@@ -105,7 +103,7 @@ function Header({ props, routes }) {
         props.location.pathname.indexOf("full-screen-maps") !== -1
           ? "navbar-absolute fixed-top"
           : "navbar-absolute fixed-top " +
-          (color === "transparent" ? "navbar-transparent " : "")
+            (color === "transparent" ? "navbar-transparent " : "")
       }
     >
       <Container fluid>
@@ -124,14 +122,15 @@ function Header({ props, routes }) {
           </div>
 
           <div className="logo">
-            <button
-              className="simple-text logo-mini"
-            >
+            <button className="simple-text logo-mini">
               <div className="logo-img">
-                <img src={logo} style={{ width: "40px", marginRight: "10px" }} alt="react-logo" />
+                <img
+                  src={logo}
+                  style={{ width: "40px", marginRight: "10px" }}
+                  alt="react-logo"
+                />
               </div>
             </button>
-
           </div>
         </div>
         <NavbarBrand href="/">{getBrand()}</NavbarBrand>
@@ -141,19 +140,31 @@ function Header({ props, routes }) {
           <span className="navbar-toggler-bar navbar-kebab" />
         </NavbarToggler>
         <Collapse isOpen={isOpen} navbar className="justify-content-end">
-
           <Nav navbar>
-
             <NavItem>
-              <Row >
-                <Col style={{ margin: "10px" }}><Link to="user-page"><FaUserCircle size={25} /></Link></Col>
-                <Col style={{ marginLeft: "0px" }}> <span className="nav-link btn-rotate" style={{ cursor: "pointer", fontSize: "13px" }}>{userDetail.first_name || ""}</span></Col>
+              <Row>
+                <Col style={{ margin: "10px" }}>
+                  <Link to="user-page">
+                    <FaUserCircle size={25} />
+                  </Link>
+                </Col>
+                <Col style={{ marginLeft: "0px" }}>
+                  {" "}
+                  <span
+                    className="nav-link btn-rotate"
+                    style={{ cursor: "pointer", fontSize: "13px" }}
+                  >
+                    {userDetail.first_name || ""}
+                  </span>
+                </Col>
               </Row>
-
-
             </NavItem>
             <NavItem>
-              <span style={{ cursor: "pointer" }} className="nav-link btn-rotate" onClick={() => setIsModalOpen(true)}>
+              <span
+                style={{ cursor: "pointer" }}
+                className="nav-link btn-rotate"
+                onClick={() => setIsModalOpen(true)}
+              >
                 Logout
               </span>
             </NavItem>
@@ -166,7 +177,9 @@ function Header({ props, routes }) {
         style={customStyles}
         contentLabel="Logout Modal"
       >
-        <button onClick={() => setIsModalOpen(false)}>Close <AiFillCloseCircle color="red" /></button>
+        <button onClick={() => setIsModalOpen(false)}>
+          Close <AiFillCloseCircle color="red" />
+        </button>
         <div style={{ padding: "20px" }}>
           <Button
             className="btn-round"

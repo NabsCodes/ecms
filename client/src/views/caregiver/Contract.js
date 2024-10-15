@@ -6,40 +6,41 @@ import Notifications from "components/Notification/Notification";
 import { useAuth } from "contexts/AuthContext";
 
 // reactstrap components
-import {
-  Card,
-  CardBody,
-  Table,
-  Row,
-  Col
-} from "reactstrap";
+import { Card, CardBody, Table, Row, Col } from "reactstrap";
 
 function Contracts() {
-  const [mode, setMode] = useState('view');
+  const [mode, setMode] = useState("view");
   const [current, setCurrent] = useState({ email: "" });
-  const [search] = useState('');
+  const [search] = useState("");
   const [notificationStatus, setNotificationStatus] = useState(false);
-  const [notificationDetails, setNotificationDetails] = useState({ msg: "", type: "" });
+  const [notificationDetails, setNotificationDetails] = useState({
+    msg: "",
+    type: "",
+  });
   const { userDetail } = useAuth();
-
 
   useEffect(
     () => {
       async function fetchContracts() {
-        await axios.get(user.showUserByEmail + "/" + userDetail.email).then((response) => {
-          if (response.data.status === true) {
-            setCurrent(response.data.data);
-          }
-          else {
-            setNotificationDetails({ msg: "Error Loading Contracts, Please Referesh The Page", type: "danger" });
-            setNotificationStatus(true);
-          }
-        });
+        await axios
+          .get(user.showUserByEmail + "/" + userDetail.email)
+          .then((response) => {
+            if (response.data.status === true) {
+              setCurrent(response.data.data);
+            } else {
+              setNotificationDetails({
+                msg: "Error Loading Contracts, Please Referesh The Page",
+                type: "danger",
+              });
+              setNotificationStatus(true);
+            }
+          });
       }
       fetchContracts();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]);
+    [search],
+  );
   // eslint-disable-next-line react-hooks/exhaustive-deps
 
   function checkDates(start1, end1) {
@@ -60,24 +61,26 @@ function Contracts() {
     return result;
   }
 
-
   return (
     <>
-      {notificationStatus === true ? <Notifications details={notificationDetails} /> : null}
+      {notificationStatus === true ? (
+        <Notifications details={notificationDetails} />
+      ) : null}
       <div className="content">
-
-        {mode === "view" ?
+        {mode === "view" ? (
           <>
-
             <Row>
               <Col md={4}>
                 <Card className="card-user">
                   <div style={{ textAlign: "center" }}>
-                    <h4 style={{ marginTop: "10px" }}>{current.first_name + " " + current.last_name}</h4>
+                    <h4 style={{ marginTop: "10px" }}>
+                      {current.first_name + " " + current.last_name}
+                    </h4>
                     <FaUserCircle size={100} />
-                    <h5 style={{ marginTop: "10px" }}>{"Contracts: " + current?.Contracts?.length || 0}</h5>
+                    <h5 style={{ marginTop: "10px" }}>
+                      {"Contracts: " + current?.Contracts?.length || 0}
+                    </h5>
                   </div>
-
                 </Card>
               </Col>
               <Col md={8}>
@@ -97,24 +100,60 @@ function Contracts() {
                           return (
                             <tr key={key}>
                               <td>
-                                {items.start_date + " - " + items.end_date}<br />
+                                {items.start_date + " - " + items.end_date}
+                                <br />
                               </td>
                               <td> {items.description}</td>
                               <td>
-                                {checkDates(items.start_date, items.end_date) ?
-                                  <div style={{ background: "rgb(46, 212, 122)", color: "white", borderRadius: "10px", cursor: "not-allowed" }}>Valid</div> :
+                                {checkDates(
+                                  items.start_date,
+                                  items.end_date,
+                                ) ? (
+                                  <div
+                                    style={{
+                                      background: "rgb(46, 212, 122)",
+                                      color: "white",
+                                      borderRadius: "10px",
+                                      cursor: "not-allowed",
+                                    }}
+                                  >
+                                    Valid
+                                  </div>
+                                ) : (
                                   <>
-                                    {key === 0 ?
-                                      <div style={{ background: "orange", color: "white", borderRadius: "10px", cursor: "pointer" }} onClick={() => { setCurrent({ ...current, email: items.email }); setMode("add"); }}>Renew?</div>
-                                      :
-                                      <div style={{ background: "crimson", color: "white", borderRadius: "10px", cursor: "not-allowed" }}>Expired</div>
-                                    }
+                                    {key === 0 ? (
+                                      <div
+                                        style={{
+                                          background: "orange",
+                                          color: "white",
+                                          borderRadius: "10px",
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={() => {
+                                          setCurrent({
+                                            ...current,
+                                            email: items.email,
+                                          });
+                                          setMode("add");
+                                        }}
+                                      >
+                                        Renew?
+                                      </div>
+                                    ) : (
+                                      <div
+                                        style={{
+                                          background: "crimson",
+                                          color: "white",
+                                          borderRadius: "10px",
+                                          cursor: "not-allowed",
+                                        }}
+                                      >
+                                        Expired
+                                      </div>
+                                    )}
                                   </>
-
-
-                                }
+                                )}
                               </td>
-
                             </tr>
                           );
                         })}
@@ -122,16 +161,12 @@ function Contracts() {
                     </Table>
                   </div>
 
-                  <CardBody>
-
-                  </CardBody>
+                  <CardBody></CardBody>
                 </Card>
               </Col>
             </Row>
           </>
-          : null
-        }
-
+        ) : null}
       </div>
     </>
   );

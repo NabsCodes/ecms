@@ -1,61 +1,57 @@
-import React from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import Homepage from "demos/Homepage.js";
-import { useAuth } from './contexts/AuthContext';
+import React from "react";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { useAuth } from "./contexts/AuthContext";
 
 import AdminLayout from "layouts/Admin.js";
 import ClientLayout from "layouts/Client";
 import CaregiverLayout from "layouts/Caregiver";
-
+import Homepage from "demos/Homepage.js";
 import LoginPage from "./views/auth/Login";
-//import MainLandingPage from "MainLandingPage.js";
 
 function RouterComp() {
+  const { loggedIn, userDetail } = useAuth();
 
-    const { loggedIn, userDetail } = useAuth();
+  // Helper function to render role-specific route
+  const renderRoleRoute = (role, Layout, defaultPath) => {
+    if (userDetail.role === role) {
+      return (
+        <>
+          <Route path={`/${role}`} render={(props) => <Layout {...props} />} />
+          <Redirect to={defaultPath} />
+        </>
+      );
+    }
+    return null;
+  };
 
-    return (
-        <BrowserRouter>
-            {loggedIn ?
-                <>
-                    <Switch>
-                        {userDetail.role === 'admin' ?
-                            <>
-                                {console.log(userDetail, "admin")}
-                                <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-                                <Redirect to="/admin/dashboard" />
-                            </>
-                            : null
-                        }
-                        {userDetail.role === 'client' ?
-                            <>
+  return (
+    <BrowserRouter>
+      <Switch>
+        {/* Public routes */}
+        <Route exact path="/" component={Homepage} />
+        <Route path="/login" component={LoginPage} />
 
-                                <Route path="/client" render={(props) => <ClientLayout {...props} />} />
-                                <Redirect to="/client/dashboard" />
-                            </> : null
-                        }
-                        {userDetail.role === 'caregiver' ?
-                            <>
-                                <Route path="/caregiver" render={(props) => <CaregiverLayout {...props} />} />
-                                <Redirect to="/caregiver/dashboard" />
-                            </>
-                            : null
-                        }
-                    </Switch>
+        {/* Protected routes */}
+        {loggedIn ? (
+          <>
+            {renderRoleRoute("admin", AdminLayout, "/admin/dashboard")}
+            {renderRoleRoute("client", ClientLayout, "/client/dashboard")}
+            {renderRoleRoute(
+              "caregiver",
+              CaregiverLayout,
+              "/caregiver/dashboard",
+            )}
+          </>
+        ) : (
+          // If not logged in, redirect to homepage
+          <Redirect to="/" />
+        )}
 
-                </>
-                :
-                <Switch>
-                    <Route exact path="/" component={Homepage} />
-                    <Route path="/login" component={LoginPage} />
-                    <Redirect to="/" />
-                </Switch>
-
-            }
-
-        </BrowserRouter>
-    )
+        {/* Fallback route */}
+        <Redirect to="/" />
+      </Switch>
+    </BrowserRouter>
+  );
 }
+
 export default RouterComp;
-
-
